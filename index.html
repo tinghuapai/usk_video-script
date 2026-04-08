@@ -1,49 +1,79 @@
-
 <style>
 * { box-sizing: border-box; }
-.wrap { padding: 1.5rem 0; max-width: 740px; }
-.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
-.step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
-.badge { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+
+/* 修正 1：讓整體畫面水平居中，並給予背景底色 */
+body {
+  background-color: #f0f2f5; 
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* 修正 2：放寬容器，並設置 margin: 0 auto 使其置中 */
+.wrap { 
+  padding: 40px 20px; 
+  max-width: 900px; /* 從 740px 放大到 900px */
+  width: 100%;
+  margin: 0 auto; 
+}
+
+/* 修正 3：增加卡片留白與陰影，提升視覺重量 */
+.card { 
+  background: #ffffff; 
+  border: 1px solid #e1e4e8; 
+  border-radius: 12px; 
+  padding: 30px; 
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
+.badge { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
 .badge.p { background: #CECBF6; color: #3C3489; }
 .badge.g { background: #C0DD97; color: #27500A; }
-.step-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
-textarea, select { width: 100%; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 14px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); outline: none; }
-textarea { resize: vertical; min-height: 72px; }
-textarea:focus, select:focus { border-color: #AFA9EC; }
-.hint { font-size: 12px; color: var(--color-text-tertiary); margin-top: 6px; line-height: 1.6; }
-.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; font-size: 14px; font-family: var(--font-sans); color: var(--color-text-primary); cursor: pointer; transition: background 0.15s; }
-.btn:hover { background: var(--color-background-secondary); }
-.btn:active { transform: scale(0.98); }
-.btn.p { background: #EEEDFE; border-color: #AFA9EC; color: #3C3489; }
-.btn.p:hover { background: #CECBF6; }
-.btn.g { background: #EAF3DE; border-color: #97C459; color: #27500A; }
-.btn.g:hover { background: #C0DD97; }
-.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
-.divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.25rem 0; }
-.info-box { background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 13px; color: #0C447C; line-height: 1.7; margin-top: 12px; }
-.type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-bottom: 4px; }
-.type-grid-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 12px; }
-.type-btn { padding: 9px 6px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); font-size: 11px; font-family: var(--font-sans); color: var(--color-text-secondary); cursor: pointer; text-align: center; line-height: 1.5; transition: all 0.15s; }
-.type-btn:hover { border-color: #AFA9EC; color: var(--color-text-primary); }
-.type-btn.selected { background: #EEEDFE; border-color: #AFA9EC; color: #3C3489; font-weight: 500; }
-.type-btn.dialogue-btn { border-color: #FAC775; background: #FAEEDA; color: #633806; }
-.type-btn.dialogue-btn:hover { background: #FAC775; }
-.type-btn.dialogue-btn.selected { background: #FAC775; border-color: #BA7517; color: #412402; }
-.type-icon { font-size: 14px; display: block; margin-bottom: 2px; }
-.type-sub { font-size: 9px; color: var(--color-text-tertiary); }
-.type-btn.selected .type-sub, .type-btn.dialogue-btn.selected .type-sub { color: inherit; opacity: 0.7; }
-.field-label { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 6px; }
-.step2-wrap { display: none; margin-top: 1rem; }
-.badge-green { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; border-radius: 99px; background: #EAF3DE; color: #27500A; border: 0.5px solid #97C459; margin-left: 6px; }
-.dialogue-sub { display: none; background: #FAEEDA; border: 0.5px solid #EF9F27; border-radius: var(--border-radius-md); padding: 10px 14px; margin-bottom: 12px; }
-.dialogue-sub.show { display: block; }
-.dialogue-sub .field-label { color: #633806; margin-bottom: 8px; }
-.pair-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.pair-btn { padding: 10px 8px; border-radius: var(--border-radius-md); border: 0.5px solid #EF9F27; background: var(--color-background-primary); font-size: 11px; font-family: var(--font-sans); color: #633806; cursor: pointer; text-align: center; line-height: 1.6; transition: all 0.15s; }
-.pair-btn:hover { background: #FAEEDA; }
-.pair-btn.selected { background: #FAC775; border-color: #BA7517; font-weight: 500; }
-.pair-icon { font-size: 14px; display: block; margin-bottom: 2px; }
+.step-title { font-size: 17px; font-weight: 600; color: #1a1a1a; }
+
+/* 修正 4：放大輸入框字體與高度 */
+textarea, select { 
+  width: 100%; 
+  border: 1px solid #d1d5db; 
+  border-radius: 8px; 
+  padding: 12px; 
+  font-size: 16px; /* 提高字體大小 */
+  color: #333; 
+  background: #fff; 
+  outline: none; 
+}
+
+textarea { 
+  resize: vertical; 
+  min-height: 250px; /* 從 72px 大幅增加至 250px */
+  line-height: 1.6;
+}
+
+/* 修正 5：放大按鈕點擊區域 */
+.btn { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 8px; 
+  padding: 12px 24px; 
+  border-radius: 8px; 
+  font-size: 15px; 
+  cursor: pointer; 
+  transition: 0.2s;
+  border: 1px solid #d1d5db;
+}
+
+.btn.p { background: #3C3489; color: #fff; border-color: #3C3489; }
+.btn.g { background: #27500A; color: #fff; border-color: #27500A; }
+
+.row { display: flex; gap: 12px; margin-top: 20px; }
+.field-label { font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 8px; }
+
+/* 調整網格大小以適應新寬度 */
+.type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
+.type-grid-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+.type-btn { padding: 12px 8px; border-radius: 8px; font-size: 12px; }
 </style>
 
 <div class="wrap">

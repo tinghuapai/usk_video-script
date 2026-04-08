@@ -1,0 +1,353 @@
+
+<style>
+* { box-sizing: border-box; }
+.wrap { padding: 1.5rem 0; max-width: 740px; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+.step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.badge { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+.badge.p { background: #CECBF6; color: #3C3489; }
+.badge.g { background: #C0DD97; color: #27500A; }
+.step-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+textarea, select { width: 100%; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 14px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); outline: none; }
+textarea { resize: vertical; min-height: 72px; }
+textarea:focus, select:focus { border-color: #AFA9EC; }
+.hint { font-size: 12px; color: var(--color-text-tertiary); margin-top: 6px; line-height: 1.6; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; font-size: 14px; font-family: var(--font-sans); color: var(--color-text-primary); cursor: pointer; transition: background 0.15s; }
+.btn:hover { background: var(--color-background-secondary); }
+.btn:active { transform: scale(0.98); }
+.btn.p { background: #EEEDFE; border-color: #AFA9EC; color: #3C3489; }
+.btn.p:hover { background: #CECBF6; }
+.btn.g { background: #EAF3DE; border-color: #97C459; color: #27500A; }
+.btn.g:hover { background: #C0DD97; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+.divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.25rem 0; }
+.info-box { background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 13px; color: #0C447C; line-height: 1.7; margin-top: 12px; }
+.type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-bottom: 4px; }
+.type-grid-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 12px; }
+.type-btn { padding: 9px 6px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); font-size: 11px; font-family: var(--font-sans); color: var(--color-text-secondary); cursor: pointer; text-align: center; line-height: 1.5; transition: all 0.15s; }
+.type-btn:hover { border-color: #AFA9EC; color: var(--color-text-primary); }
+.type-btn.selected { background: #EEEDFE; border-color: #AFA9EC; color: #3C3489; font-weight: 500; }
+.type-btn.dialogue-btn { border-color: #FAC775; background: #FAEEDA; color: #633806; }
+.type-btn.dialogue-btn:hover { background: #FAC775; }
+.type-btn.dialogue-btn.selected { background: #FAC775; border-color: #BA7517; color: #412402; }
+.type-icon { font-size: 14px; display: block; margin-bottom: 2px; }
+.type-sub { font-size: 9px; color: var(--color-text-tertiary); }
+.type-btn.selected .type-sub, .type-btn.dialogue-btn.selected .type-sub { color: inherit; opacity: 0.7; }
+.field-label { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 6px; }
+.step2-wrap { display: none; margin-top: 1rem; }
+.badge-green { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; border-radius: 99px; background: #EAF3DE; color: #27500A; border: 0.5px solid #97C459; margin-left: 6px; }
+.dialogue-sub { display: none; background: #FAEEDA; border: 0.5px solid #EF9F27; border-radius: var(--border-radius-md); padding: 10px 14px; margin-bottom: 12px; }
+.dialogue-sub.show { display: block; }
+.dialogue-sub .field-label { color: #633806; margin-bottom: 8px; }
+.pair-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.pair-btn { padding: 10px 8px; border-radius: var(--border-radius-md); border: 0.5px solid #EF9F27; background: var(--color-background-primary); font-size: 11px; font-family: var(--font-sans); color: #633806; cursor: pointer; text-align: center; line-height: 1.6; transition: all 0.15s; }
+.pair-btn:hover { background: #FAEEDA; }
+.pair-btn.selected { background: #FAC775; border-color: #BA7517; font-weight: 500; }
+.pair-icon { font-size: 14px; display: block; margin-bottom: 2px; }
+</style>
+
+<div class="wrap">
+<div class="card">
+  <div class="step-header">
+    <div class="badge p">1</div>
+    <span class="step-title">設定主題與腳本參數</span>
+    <span class="badge-green">廣告規範 + APP限制內建</span>
+  </div>
+
+  <div class="field-label">核心主題或事件</div>
+  <textarea id="topic" placeholder="例：Intel加入TeraFab計畫，AI算力建設題材升溫&#10;例：矽光子族群強勢，波若威上詮持續走強&#10;例：Fed降息預期升溫，美股科技股反彈"></textarea>
+
+  <div class="step2-wrap" id="step2">
+    <hr class="divider" style="margin-top:1rem;">
+    <div class="field-label">腳本類型</div>
+    <div class="type-grid">
+      <div class="type-btn" onclick="selectType(this,'news')"><span class="type-icon">📰</span>新聞事件型<br><span class="type-sub">事件→美股→連動→APP</span></div>
+      <div class="type-btn" onclick="selectType(this,'compare')"><span class="type-icon">⚖️</span>產業比較型<br><span class="type-sub">同業美股優缺比較</span></div>
+      <div class="type-btn" onclick="selectType(this,'edu')"><span class="type-icon">🎓</span>教育觀念型<br><span class="type-sub">投資概念→APP驗證</span></div>
+      <div class="type-btn" onclick="selectType(this,'tw')"><span class="type-icon">🔍</span>台股源頭型<br><span class="type-sub">台股異動→溯源美股</span></div>
+    </div>
+    <div class="type-grid-bottom">
+      <div class="type-btn" onclick="selectType(this,'hook')"><span class="type-icon">🎣</span>反向懸念型<br><span class="type-sub">反常識→揭曉信號</span></div>
+      <div class="type-btn dialogue-btn" onclick="selectType(this,'dialogue')"><span class="type-icon">🎭</span>對話型（情境劇）<br><span class="type-sub">角色互動帶出財經知識</span></div>
+      <div class="type-btn selected" onclick="selectType(this,'auto')"><span class="type-icon">✨</span>AI 自動選擇<br><span class="type-sub">依主題判斷最適類型</span></div>
+    </div>
+
+    <div class="dialogue-sub" id="dialogue-sub">
+      <div class="field-label">選擇角色配對</div>
+      <div class="pair-grid">
+        <div class="pair-btn selected" onclick="selectPair(this,'bro')"><span class="pair-icon">👦👦</span>哥哥 × 弟弟<br><span style="font-size:10px">老手嫌棄小白<br>→啟蒙教學</span></div>
+        <div class="pair-btn" onclick="selectPair(this,'sis')"><span class="pair-icon">👩👩</span>女1 × 女2<br><span style="font-size:10px">清醒吐槽 × 容易嗨<br>→打臉教學</span></div>
+        <div class="pair-btn" onclick="selectPair(this,'god')"><span class="pair-icon">🧠👥</span>隱藏大神 × 散戶群<br><span style="font-size:10px">神人冷靜丟數據<br>→路人圍觀驚艷</span></div>
+      </div>
+      <div class="field-label" style="margin-top:10px;">開場生活情境（讓劇情更有代入感）</div>
+      <select id="scene-select">
+        <option value="AI自動選擇生活場景">AI 自動選擇最適合此主題的生活場景</option>
+        <option value="看球賽（籃球、棒球、足球等）兄弟倆穿球衣激動歡呼">看球賽（籃球/棒球/足球）</option>
+        <option value="廟裡拜拜許願，擲茭求財神爺指引潛力股">廟裡拜拜許願求財神爺</option>
+        <option value="便當店漲價，邊吃邊抱怨薪水沒跟著漲">便當店/餐廳漲價</option>
+        <option value="客廳看財經新聞，媽媽在旁邊抄筆記抓不到重點">家人看財經新聞</option>
+        <option value="玩大富翁桌遊，背景突然傳來財經新聞">玩大富翁桌遊</option>
+        <option value="追星偶像（財經人物如黃仁勳），把他當理想型討論">追星財經人物</option>
+        <option value="朋友聚會，一個人心不在焉一直滑手機看盤">朋友聚餐卻偷看盤</option>
+        <option value="夜市/路邊攤，邊吃小吃邊聊股票">夜市邊吃邊聊股票</option>
+      </select>
+    </div>
+
+    <div class="field-label">指定 APP 功能引導</div>
+    <select id="cta-feature">
+      <option value="AI自動選擇">AI 自動選擇最適合此主題的功能</option>
+      <optgroup label="━━ 大盤">
+        <option value="大盤→美股指數（道瓊/S&P500/那斯達克/費城半導體＋產業表現）">大盤 → 美股指數＋產業表現</option>
+        <option value="大盤→總體經濟→FED基準利率（點進去看利率歷史走勢）">大盤 → 總體經濟 → FED利率</option>
+        <option value="大盤→總體經濟（FED利率/VIX/美元指數/CPI/NFP全覽）">大盤 → 總體經濟（全覽）</option>
+        <option value="大盤→台股ADR（台積電TSM/日月光/聯電等ADR即時報價）">大盤 → 台股ADR</option>
+        <option value="大盤→科技股">大盤 → 科技股</option>
+      </optgroup>
+      <optgroup label="━━ 美股個股">
+        <option value="搜尋美股個股代號→K線圖（切換日週月，附財報/事件標記）">美股個股 → K線圖</option>
+        <option value="搜尋美股個股代號→達人觀點（近3個月情緒統計，APP彙整摘要）">美股個股 → 達人觀點</option>
+        <option value="搜尋美股個股代號→河流圖（估值區間：昂貴/合理偏高/合理偏低/便宜）">美股個股 → 河流圖</option>
+        <option value="搜尋美股個股代號→月份漲跌（近10年每月上漲機率與平均漲幅）">美股個股 → 月份漲跌</option>
+        <option value="搜尋美股個股代號→研究報告（含VIP深度報告）">美股個股 → 研究報告</option>
+        <option value="搜尋美股個股代號→新聞（即時新聞彙整）">美股個股 → 即時新聞</option>
+      </optgroup>
+      <optgroup label="━━ 選股">
+        <option value="選股→每月必漲股（歷史上漲機率/平均漲幅/季走勢，切換必漲/必跌）">選股 → 每月必漲股</option>
+        <option value="選股→大師持股（巴菲特/索羅斯/橋水/方舟等持股動態）">選股 → 大師持股</option>
+        <option value="選股→基本面（高成長藍籌股/高獲利藍籌股/ROE績優股）">選股 → 基本面選股</option>
+        <option value="選股→技術面（昨日強勢股/弱勢股/近期強勢股）">選股 → 技術面選股</option>
+        <option value="選股→ETF排行（今日熱門/漲幅排行）">選股 → ETF排行</option>
+      </optgroup>
+      <optgroup label="━━ 其他">
+        <option value="快訊→財報（美股即時財報）">快訊 → 財報</option>
+        <option value="投資想法→研究報告（全部/VIP專屬）">投資想法 → 研究報告</option>
+        <option value="自選股（建立清單追蹤美股個股，如INTC/MRVL/NVDA）">自選股 → 追蹤美股個股</option>
+      </optgroup>
+    </select>
+    <p class="hint">所有功能引導僅限美股K線APP內的美股功能</p>
+  </div>
+
+  <div class="row">
+    <button class="btn p" onclick="toggleStep2()" id="btn-expand">展開腳本設定 ▾</button>
+    <button class="btn g" onclick="doResearch()">執行連動矩陣檢索 + 產腳本 ↗</button>
+  </div>
+  <div class="info-box" id="info-box" style="display:none;"></div>
+</div>
+</div>
+
+<script>
+let selectedType = 'auto';
+let selectedPair = 'bro';
+let step2Open = false;
+
+const TYPE_LABELS = {
+  news:'📰 新聞事件型', compare:'⚖️ 產業比較型', edu:'🎓 教育觀念型',
+  tw:'🔍 台股源頭型', hook:'🎣 反向懸念型', dialogue:'🎭 對話型', auto:'✨ AI 自動選擇'
+};
+
+const PAIR_LABELS = {
+  bro: '哥哥（老手）× 弟弟（小白）',
+  sis: '女1（清醒）× 女2（容易嗨）',
+  god: '隱藏大神 × 焦慮散戶＋路人'
+};
+
+const PAIR_DETAILS = {
+  bro: `角色A 哥哥（老手）：看球看盤兩不誤的聰明投資人。語氣：略帶嫌棄但願意教，偶爾一臉無奈。說話方式：直接、有點炫耀但不油膩。
+角色B 弟弟（小白）：熱血、四肢發達、愛用土法煉鋼的散戶。語氣：興奮、莽撞、容易衝動，說完蠢話就被打臉。`,
+  sis: `角色A 女1（清醒者）：消息靈通、人間清醒，負責吐槽跟教學。語氣：冷靜、偶爾毒舌，說話直接有邏輯。
+角色B 女2（容易嗨）：容易嗨、容易做白日夢，情緒浮動大。語氣：嗨起來誇張、被打臉後秒慫，恍然大悟時很可愛。`,
+  god: `角色A 隱藏大神：語氣冷靜、自帶霸氣，不鳴則已一鳴驚人。說話精準、數字豐富，不廢話。通常在最需要的時候出現丟出關鍵數據。
+角色B 焦慮散戶：容易激動，情緒寫在臉上，代表一般散戶。問出觀眾心裡想說的話。
+角色C 路人/吃瓜群眾（可選）：活潑、喜歡看戲吐槽，突然亂入製造笑點。`
+};
+
+const APP_LIMITS = `【美股K線 APP 功能限制——必須嚴格遵守】
+1. 只能搜尋美股個股代號（NVDA、MRVL、INTC、TSM等），絕對不能引導搜尋台股代號
+2. 沒有「法人持股」「投信買賣超」「外資動向」頁面，不能提及
+3. 唯一台股相關功能：大盤→台股ADR（台積電TSM等ADR報價）
+4. CTA功能必須是APP內實際存在的功能`;
+
+const COMPLIANCE = `【廣告規範】禁止：飆股/必漲股/飆漲→強勢股/焦點股；暴漲/暴跌→大幅走高/重挫；找出/抓住→觀察/查看；學會/掌握→即時追蹤；最大→主要；獲利/卡位/致富→提高決策品質；川普→美國政策；AI盯盤→APP追蹤。語氣可有吸引力但不承諾投資成果。`;
+
+const TYPE_INSTRUCTIONS = {
+  news: `腳本類型：新聞事件型（旁白敘事風格）
+結構：事件爆發→美股受惠標的→台美連動邏輯→APP追蹤
+Hook：用事件數字或結果直接開場`,
+
+  compare: `腳本類型：產業比較型（旁白敘事風格）
+結構：同產業2-3檔美股比較關鍵差異→台廠位置→APP查看
+Hook：用對比落差開場`,
+
+  edu: `腳本類型：教育觀念型（旁白敘事風格）
+結構：投資概念/反直覺觀點→散戶可觀察方向→APP功能對應
+Hook：反直覺觀點或市場現象開場`,
+
+  tw: `腳本類型：台股源頭型（旁白敘事風格）
+結構：台股異動→溯源美股事件→建立連動認知→引導查看美股源頭標的
+絕對禁止：引導搜尋台股代號、提及APP有法人持股功能`,
+
+  hook: `腳本類型：反向懸念型（旁白敘事風格）
+結構：反市場共識開場→拋出2個被忽略的信號→逐一揭曉→引導APP查看
+Hook：「大家都在看XX，但真正的訊號來自這裡...」`,
+
+  auto: `腳本類型：AI自動判斷（選最適類型，標示原因）
+注意：若判斷為台股源頭型，必須嚴格遵守台股源頭型的APP限制`
+};
+
+const DIALOGUE_INSTRUCTION = (pair, scene) => `腳本類型：對話型（情境劇）——這是與其他類型完全不同的格式
+
+【核心設計原則】
+1. 以「生活化日常情境」開場，前8秒完全不談股票，製造代入感
+2. 角色要有鮮明性格缺點，觀眾才有代入感（不只是無知，要有具體弱點）
+3. 財經資訊由「老手角色」自然說出，不是廣告詞，是角色的性格展現
+4. APP由「小白角色」發問引出（「這是什麼APP？」），不由老手主動推銷
+5. 台詞要口語化，可以夾雜台灣口語/閩南語/俚語，增加親切感
+6. 精確數字（漲幅、連買天數、個股代號）用紅字/黃字強調，是信任感來源
+
+【角色設定】
+${PAIR_DETAILS[pair]}
+
+【開場生活情境】
+${scene}
+
+【固定5段結構——必須依序執行】
+① 0–8s 生活化開場：用選定的生活情境切入，完全不談股票，製造代入感
+② 8–20s 衝突製造：小白出糗/遇到問題/崩潰/被打臉，引出「我需要解法」的張力
+③ 20–40s 核心資訊段：老手丟出精確數據（美股個股代號、漲跌幅、市場動向），台詞中的關鍵數字加[紅字標示]提示剪輯師強調
+④ 40–55s APP自然置入：小白看到驚訝問「這是什麼APP？」，老手展示美股K線APP的指定功能，展示畫面要指定具體操作路徑
+⑤ 55–End CTA：小白被感化「馬上載！馬上載！」，老手補一句下載指令
+
+【輸出格式——與其他類型不同，使用表格形式】
+=== 對話型短影音完整腳本 ===
+
+【腳本標題】（吸睛、有話題感）
+
+【角色設定】
+（列出角色名稱與性格簡述）
+
+【場景】
+
+| 時間 | 畫面建議（Visual） | 台詞/旁白（Audio） |
+|------|-------------------|-------------------|
+| 00–08s | ... | ... |
+| 08–20s | ... | ... |
+| 20–40s | ... | ... |
+| 40–55s | ... | ... |
+| 55–End | ... | ... |
+
+【廣告規範自查】（格式：「原詞 → 改為 XX」）
+
+【APP畫面錄製指示】（給剪輯師的具體操作路徑）
+
+【強調字卡（3–5個）】（適合疊加在畫面上的衝擊性文字）
+
+【發布策略】
+• 最佳發布時間：
+• Hashtag（6–8個）：
+• 縮圖文字建議：`;
+
+function toggleStep2() {
+  step2Open = !step2Open;
+  document.getElementById('step2').style.display = step2Open ? 'block' : 'none';
+  document.getElementById('btn-expand').textContent = step2Open ? '收起設定 ▴' : '展開腳本設定 ▾';
+}
+
+function selectType(el, type) {
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedType = type;
+  const sub = document.getElementById('dialogue-sub');
+  sub.className = 'dialogue-sub' + (type === 'dialogue' ? ' show' : '');
+}
+
+function selectPair(el, pair) {
+  document.querySelectorAll('.pair-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPair = pair;
+}
+
+function doResearch() {
+  const topic = document.getElementById('topic').value.trim();
+  if (!topic) { alert('請先輸入主題或事件關鍵字'); return; }
+  const cta = document.getElementById('cta-feature').value;
+  const scene = document.getElementById('scene-select').value;
+
+  let typeInstr;
+  if (selectedType === 'dialogue') {
+    typeInstr = DIALOGUE_INSTRUCTION(selectedPair, scene);
+  } else {
+    typeInstr = TYPE_INSTRUCTIONS[selectedType] || TYPE_INSTRUCTIONS['auto'];
+  }
+
+  const isDialogue = selectedType === 'dialogue';
+  const outputFormat = isDialogue ? '' : `輸出格式：
+=== 60秒短影音完整腳本 ===
+【腳本類型與選用原因】
+【Hook 標題（2個版本）】版本A（懸念型）：  版本B（數據型）：
+【完整旁白】（150-180字，口語化）
+0–5秒 ▌開場Hook：  5–20秒 ▌情境鋪陳：  20–35秒 ▌美股源頭解析：  35–50秒 ▌台股連動邏輯：  50–57秒 ▌APP功能帶入：  57–60秒 ▌CTA：
+【廣告規範自查】（格式：「原詞 → 改為 XX」）
+【畫面提示 / 剪輯備註】0–5秒：  5–20秒：  20–35秒：  35–50秒：  50–57秒（具體錄製路徑）：  57–60秒：
+【強調字卡（3–5個）】
+【發布策略】最佳發布時間：  Hashtag（6–8個）：  縮圖文字建議：`;
+
+  const prompt = `[影音腳本工具指令 v8 — 含對話型腳本 + 廣告規範 + APP功能限制]
+
+請依序完成以下兩個任務：
+
+---
+## 任務一：台美股連動矩陣檢索
+
+請立即進行即時聯網搜尋，提取當前最新市場數據。
+1. 禁用歷史記憶，只使用即時搜尋結果，無法確認標示[待確認]
+2. 必須同時提供美股領頭羊與台股關聯標的
+3. 數值必須精確
+
+核心主題：${topic}
+
+輸出格式：
+### 【台美股連動矩陣】
+* **主題關聯事件**：[事件背景 + 如何從美股外溢至台股]
+* **美股領頭羊：[名稱與代號]**
+  * 最新股價與漲跌幅：[精確數值，標示日期]
+  * 技術面與市場動向：[客觀事實]
+* **台股關聯標的：[名稱與代號]**
+  * 最新股價與漲跌幅：[精確數值，標示日期]
+  * 市場動向：[近期表現觀察]
+* **台美連動邏輯（腳本切入點）**：[一句話總結]
+* **資料來源**：[來源媒體/平台]
+* **⚠️ 數據可信度備註**：[已驗證 vs [待確認] 項目]
+
+---
+## 任務二：短影音完整腳本
+
+${APP_LIMITS}
+
+${COMPLIANCE}
+
+${typeInstr}
+
+APP功能引導：${cta === 'AI自動選擇' ? '根據主題自動選最相關的APP功能，必須是APP內實際存在的美股功能' : `「${cta}」，自然帶出，不要廣告感`}
+
+《美股K線 APP》畫面場景（給剪輯師）：
+- 深黑底背景，橘黃accent，漲紅跌綠；底部導覽：交易/大盤/自選股/選股/投資想法/快訊
+- 大盤→美股指數：四宮格道瓊/S&P500/那斯達克/費城半導體＋迷你走勢圖
+- 大盤→總體經濟：FED利率/美債殖利率/VIX/美元指數/CPI/NFP清單
+- 大盤→台股ADR：台積電TSM/日月光/聯電等ADR報價（唯一台股相關數據）
+- 美股個股K線圖：股價漲跌＋黃框AI深度解讀＋K線主圖＋成交量KD
+- 美股個股河流圖：紅昂貴/橘偏高/黃偏低/綠便宜＋白線收盤價
+- 美股個股達人觀點：情緒統計條狀圖＋達人觀點列表＋APP彙整摘要時序圖
+- 美股個股月份漲跌：圓餅圖上漲機率＋長條圖近10年每月平均漲幅
+- 選股→大師持股：巴菲特/索羅斯等持股動態
+- 選股→每月必漲股：必漲/必跌切換＋月份頁籤
+
+${outputFormat}`;
+
+  const infoBox = document.getElementById('info-box');
+  infoBox.style.display = 'block';
+  const pairInfo = selectedType === 'dialogue' ? `｜角色：${PAIR_LABELS[selectedPair]}` : '';
+  infoBox.innerHTML = `已送出：<strong>${topic}</strong><br>類型：${TYPE_LABELS[selectedType]}${pairInfo}<br>CTA：${cta === 'AI自動選擇' ? 'AI自動選擇' : cta.split('（')[0]}<br><br>Claude 正在對話區處理，請往下滑查看結果 ↓`;
+
+  sendPrompt(prompt);
+}
+</script>

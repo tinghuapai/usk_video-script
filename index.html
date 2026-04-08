@@ -1,79 +1,101 @@
 <style>
 * { box-sizing: border-box; }
 
-/* 修正 1：讓整體畫面水平居中，並給予背景底色 */
+/* 基礎佈局：確保畫面居中且有背景質感 */
 body {
-  background-color: #f0f2f5; 
+  background-color: #f4f6f8;
   margin: 0;
   display: flex;
   justify-content: center;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
 }
 
-/* 修正 2：放寬容器，並設置 margin: 0 auto 使其置中 */
 .wrap { 
-  padding: 40px 20px; 
-  max-width: 900px; /* 從 740px 放大到 900px */
+  padding: 3rem 1.5rem; 
+  max-width: 900px; /* 放大容器寬度 */
   width: 100%;
   margin: 0 auto; 
 }
 
-/* 修正 3：增加卡片留白與陰影，提升視覺重量 */
 .card { 
   background: #ffffff; 
   border: 1px solid #e1e4e8; 
-  border-radius: 12px; 
-  padding: 30px; 
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-radius: 16px; 
+  padding: 2.5rem; 
+  margin-bottom: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
-.step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
-.badge { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+/* 標題與標籤 */
+.step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
+.badge { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0; }
 .badge.p { background: #CECBF6; color: #3C3489; }
 .badge.g { background: #C0DD97; color: #27500A; }
-.step-title { font-size: 17px; font-weight: 600; color: #1a1a1a; }
+.step-title { font-size: 18px; font-weight: 600; color: #1a1a1a; }
+.badge-green { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 4px 10px; border-radius: 99px; background: #EAF3DE; color: #27500A; border: 0.5px solid #97C459; margin-left: 6px; }
 
-/* 修正 4：放大輸入框字體與高度 */
+/* 輸入框與下拉選單優化 */
 textarea, select { 
   width: 100%; 
   border: 1px solid #d1d5db; 
-  border-radius: 8px; 
-  padding: 12px; 
-  font-size: 16px; /* 提高字體大小 */
-  color: #333; 
-  background: #fff; 
+  border-radius: 10px; 
+  padding: 14px; 
+  font-size: 16px; 
+  background: #fafafa; 
   outline: none; 
+  transition: all 0.2s;
 }
+textarea { min-height: 200px; resize: vertical; line-height: 1.6; }
+textarea:focus, select:focus { border-color: #AFA9EC; background: #fff; box-shadow: 0 0 0 3px rgba(175, 169, 236, 0.2); }
 
-textarea { 
-  resize: vertical; 
-  min-height: 250px; /* 從 72px 大幅增加至 250px */
-  line-height: 1.6;
-}
-
-/* 修正 5：放大按鈕點擊區域 */
-.btn { 
-  display: inline-flex; 
-  align-items: center; 
-  gap: 8px; 
-  padding: 12px 24px; 
-  border-radius: 8px; 
-  font-size: 15px; 
-  cursor: pointer; 
-  transition: 0.2s;
-  border: 1px solid #d1d5db;
-}
-
-.btn.p { background: #3C3489; color: #fff; border-color: #3C3489; }
-.btn.g { background: #27500A; color: #fff; border-color: #27500A; }
-
-.row { display: flex; gap: 12px; margin-top: 20px; }
-.field-label { font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 8px; }
-
-/* 調整網格大小以適應新寬度 */
+/* 腳本類型按鈕網格 - 修正點擊功能 */
 .type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
-.type-grid-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
-.type-btn { padding: 12px 8px; border-radius: 8px; font-size: 12px; }
+.type-grid-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+
+.type-btn { 
+  padding: 15px 10px; 
+  border-radius: 12px; 
+  border: 1px solid #e5e7eb; 
+  background: #fff; 
+  cursor: pointer; 
+  text-align: center; 
+  transition: all 0.2s;
+}
+.type-btn:hover { border-color: #AFA9EC; background: #f8f7ff; }
+.type-btn.selected { background: #EEEDFE; border-color: #3C3489; color: #3C3489; font-weight: 600; box-shadow: 0 2px 8px rgba(60, 52, 137, 0.1); }
+
+.type-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+.type-sub { font-size: 10px; color: #6b7280; display: block; margin-top: 4px; line-height: 1.3; }
+
+/* 對話型專屬樣式 */
+.type-btn.dialogue-btn { border-color: #FAC775; background: #FFF9F0; }
+.type-btn.dialogue-btn.selected { background: #FAC775; border-color: #BA7517; color: #412402; }
+
+/* 【關鍵修正】隱藏邏輯控制 */
+.step2-wrap { display: none; margin-top: 1.5rem; } /* 展開腳本設定預設隱藏 */
+.dialogue-sub { display: none; background: #FFF9F0; border: 1px solid #EF9F27; border-radius: 12px; padding: 20px; margin-bottom: 1.5rem; }
+.dialogue-sub.show { display: block; } /* 只有在選對話型時顯示 */
+
+/* 角色選擇按鈕 */
+.pair-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+.pair-btn { padding: 12px 8px; border-radius: 10px; border: 1px solid #EF9F27; background: #fff; cursor: pointer; text-align: center; font-size: 13px; transition: 0.2s; }
+.pair-btn.selected { background: #FAC775; border-color: #BA7517; font-weight: 600; }
+
+/* 按鈕與底部資訊 */
+.row { display: flex; gap: 12px; margin-top: 2rem; }
+.btn { 
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; 
+  padding: 14px 24px; border-radius: 10px; font-size: 15px; font-weight: 500; 
+  cursor: pointer; transition: 0.2s; border: 1px solid #d1d5db;
+}
+.btn.p { background: #EEEDFE; color: #3C3489; border-color: #AFA9EC; }
+.btn.g { background: #27500A; color: #fff; border-color: #27500A; flex: 1; }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+.field-label { font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 10px; display: block; }
+.hint { font-size: 12px; color: #6b7280; margin-top: 8px; }
+.info-box { background: #E6F1FB; border: 1px solid #85B7EB; border-radius: 10px; padding: 15px; font-size: 14px; color: #0C447C; margin-top: 1.5rem; line-height: 1.6; }
+.divider { border: none; border-top: 1px solid #eee; margin: 1.5rem 0; }
 </style>
 
 <div class="wrap">

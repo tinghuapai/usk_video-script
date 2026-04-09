@@ -341,23 +341,7 @@
     </div>
   </div>
 
-  <!-- API Key -->
-  <div class="api-section">
-    <div class="api-header">
-      <span class="api-title">🔑 Anthropic API Key</span>
-      <span class="api-saved" id="api-saved">✓ 已儲存</span>
-    </div>
-    <div class="api-input-row">
-      <input type="password" class="api-input" id="api-key"
-        placeholder="sk-ant-api03-..." autocomplete="off">
-      <button class="btn btn-save" onclick="saveKey()">儲存</button>
-      <button class="btn" onclick="clearKey()" style="font-size:12px;padding:9px 12px;">清除</button>
-    </div>
-    <div class="api-note">
-      Key 只存在你的瀏覽器 localStorage，不會上傳到任何伺服器。
-      申請：<a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
-    </div>
-  </div>
+  <!-- API Key 已藏在伺服器端，前端不需要輸入 -->
 
   <!-- Step 1: Topic -->
   <div class="card">
@@ -702,11 +686,11 @@ ${APP_SCREEN}
 ${outputFmt}`;
 }
 
+// ── Proxy URL（部署到 Vercel 後改成你的 Vercel 網址）──
+const PROXY_URL = 'https://usk-proxy-git-main-ariel-pai-3007s-projects.vercel.app/api/proxy';
+
 // ── Main run function ──
 async function runAll() {
-  const apiKey = localStorage.getItem('anthropic_key') || document.getElementById('api-key').value.trim();
-  if (!apiKey) { alert('請先輸入並儲存 API Key'); return; }
-
   const topic = document.getElementById('topic').value.trim();
   if (!topic) { alert('請先輸入主題或事件關鍵字'); return; }
 
@@ -729,13 +713,10 @@ async function runAll() {
 請使用繁體中文回覆。`;
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch(PROXY_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'interleaved-thinking-2025-05-14'
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
